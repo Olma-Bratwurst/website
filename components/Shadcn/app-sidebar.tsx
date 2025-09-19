@@ -16,6 +16,7 @@ import {
   ListIcon,
   SearchIcon,
   SettingsIcon,
+  Store,
   UsersIcon,
 } from "lucide-react"
 
@@ -132,21 +133,26 @@ const data = {
     // },
   ],
   documents: [
-    // {
-    //   name: "Data Library",
-    //   url: "#",
-    //   icon: DatabaseIcon,
-    // },
-    // {
-    //   name: "Reports",
-    //   url: "#",
-    //   icon: ClipboardListIcon,
-    // },
-    // {
-    //   name: "Word Assistant",
-    //   url: "#",
-    //   icon: FileIcon,
-    // },
+    {
+      name: "Overview",
+      url: "/",
+      icon: DatabaseIcon,
+    },
+    {
+      name: "Subscription",
+      url: "/subscription",
+      icon: ClipboardListIcon,
+    },
+    {
+      name: "Category",
+      url: "/category",
+      icon: FileIcon,
+    },
+    {
+      name: "Vendor",
+      url: "/vendor",
+      icon: Store,
+    },
   ],
 }
 
@@ -160,22 +166,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              {/* <a href="#">
-                <ArrowUpCircleIcon className="h-5 w-5" />
-                <span className="text-base font-semibold">Koincele</span>
-              </a> */}
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
         {/* <NavMain items={data.navMain} /> */}
-        {/* <NavDocuments items={data.documents} /> */}
+        <NavDocuments items={data.documents} />
         {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
-      <SidebarFooter>
-        {/* <NavUser user={data.user} /> */}
-      </SidebarFooter>
+      {/* <SidebarFooter>
+        <NavUser user={data.user} />
+      </SidebarFooter> */}
     </Sidebar>
   )
 }
