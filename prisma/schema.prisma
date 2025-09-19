@@ -1,0 +1,94 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_CONNECTION_STRING")
+}
+
+model User {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  name           String?
+  email          String?   @unique
+  emailVerified  DateTime?
+  image          String?
+
+  accounts       Account[]
+  sessions       Session[] // ✅ Required for session persistence
+}
+
+model Account {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String   @db.ObjectId
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.String
+  access_token       String?  @db.String
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.String
+  session_state      String?
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Transaction {
+  id                      String   @id @default(auto()) @map("_id") @db.ObjectId
+  ZEILEN_NR               Int?
+  MONEY_ACCOUNT_NAME      String?
+  MAC_CURRY_ID            String?
+  MAC_CURRY_NAME          String?
+  MACC_TYPE               String?
+  PRODUKT                 String?
+  KUNDEN_NAME             String?
+  TRX_ID                  Int?
+  TRX_TYPE_ID             String?
+  TRX_TYPE_SHORT          String?
+  TRX_TYPE_NAME           String?
+  BUCHUNGS_ART_SHORT      String?
+  BUCHUNGS_ART_NAME       String?
+  VAL_DATE                String?   // could also be DateTime if you parse dates
+  TRX_DATE                String?   // same consideration as above
+  DIRECTION               Int?
+  AMOUNT                  Float?
+  TRX_CURRY_ID            Int?
+  TRX_CURRY_NAME          String?
+  TEXT_SHORT_CREDITOR     String?
+  TEXT_CREDITOR           String?
+  TEXT_SHORT_DEBITOR      String?
+  TEXT_DEBITOR            String?
+  POINT_OF_SALE_AND_LOCATION String?
+  ACQUIRER_COUNTRY_ID     Int?
+  ACQUIRER_COUNTRY_NAME   String?
+  CARD_ID                 String?
+}

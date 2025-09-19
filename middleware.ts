@@ -1,0 +1,22 @@
+import { getToken } from "next-auth/jwt";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+
+export async function middleware(request: NextRequest) {
+  const token = await getToken({ req: request });
+  const isAuth = !!token;
+  const isAdmin = request.nextUrl.pathname.startsWith("/admin");
+
+  if (!isAuth && isAdmin) {
+    const callbackUrl = request.nextUrl.pathname;
+    return NextResponse.redirect(
+      new URL(`/api/auth/signin?callbackUrl=${callbackUrl}`, request.url)
+    );
+  }
+
+  return NextResponse.next();
+}
+
+export const config = {
+    matcher: ["/admin/:path*"], // only protect these routes
+  };
