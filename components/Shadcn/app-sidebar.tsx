@@ -149,7 +149,12 @@ const data = {
       icon: FileIcon,
     },
     {
-      name: "Vendor",
+      name: "Booking Type",
+      url: "/booking-type",
+      icon: FileIcon,
+    },
+    {
+      name: "Vendor",  
       url: "/vendor",
       icon: Store,
     },
