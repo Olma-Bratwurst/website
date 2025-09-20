@@ -10,7 +10,6 @@ type Msg = {
   sql?: string;
   rows?: Record<string, any>[];
   suggestions?: string[];
-
 };
 
 // const ASK_ENDPOINT = "http://localhost:5050/api/ask";
