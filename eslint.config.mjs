@@ -39,6 +39,7 @@ const config = typescriptEslint.config(
   },
   {
     settings: {
+      "import/core-modules": ["dotenv/config"],
       tailwindcss: {
         callees: ["classnames", "clsx", "ctl", "cn", "cva"],
       },

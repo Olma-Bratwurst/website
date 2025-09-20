@@ -138,26 +138,26 @@ const data = {
       url: "/",
       icon: DatabaseIcon,
     },
-    {
-      name: "Subscription",
-      url: "/subscription",
-      icon: ClipboardListIcon,
-    },
-    {
-      name: "Category",
-      url: "/category",
-      icon: FileIcon,
-    },
-    {
-      name: "Booking Type",
-      url: "/booking-type",
-      icon: FileIcon,
-    },
-    {
-      name: "Vendor",  
-      url: "/vendor",
-      icon: Store,
-    },
+    // {
+    //   name: "Subscription",
+    //   url: "/subscription",
+    //   icon: ClipboardListIcon,
+    // },
+    // {
+    //   name: "Category",
+    //   url: "/category",
+    //   icon: FileIcon,
+    // },
+    // {
+    //   name: "Booking Type",
+    //   url: "/booking-type",
+    //   icon: FileIcon,
+    // },
+    // {
+    //   name: "Vendor",  
+    //   url: "/vendor",
+    //   icon: Store,
+    // },
   ],
 }
 
