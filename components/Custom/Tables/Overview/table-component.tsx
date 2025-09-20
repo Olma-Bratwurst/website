@@ -9,12 +9,12 @@ import {
 } from "@/components/Shadcn/ui/card";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
-import { getAllDatapoints } from "@/server-actions/summary";
+import { getAllDatapoints, getAllDatapoints2 } from "@/server-actions/summary";
 
 export default async function OverviewTable({
 }) {
 
-  const lastDataPoints = await getAllDatapoints();
+  const lastDataPoints = await getAllDatapoints2();
   lastDataPoints.data.map((data) => {
     let newData = data;
     newData.AMOUNT = Math.round(data.AMOUNT ?? 0)

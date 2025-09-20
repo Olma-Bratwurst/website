@@ -9,7 +9,7 @@ import {
   SidebarProvider,
 } from "@/components/Shadcn/ui/sidebar"
 import { PaymentsMap } from "@/components/Custom/Map";
-import { getAllDatapoints } from "@/server-actions/summary";
+import { getAllDatapoints, getAllDatapoints2 } from "@/server-actions/summary";
 import { Transaction } from "@prisma/client";
 import RecurringPaymentsCard from "@/components/Custom/RecurringPaymentsCard";
 import PartnerAds from "@/components/Custom/PartnerAds";
@@ -43,6 +43,7 @@ export default async function Page() {
   //   skip: 0,
   // });
   const allTransactions = await getAllDatapoints();
+  const allTransactions2 = await getAllDatapoints2();
 
   const locationSet = new Set<string>();
 
@@ -193,7 +194,7 @@ export default async function Page() {
   const vendorTotals: Record<string, number> = {};
 
 allTransactions.data.forEach((trx: Transaction) => {
-  const vendor = trx.TEXT_SHORT_DEBITOR?.trim();
+  const vendor = trx.POINT_OF_SALE_AND_LOCATION?.trim();
   const amountChf = Number(trx.AMOUNT_CHF) || 0;
 
   if (!vendor || vendor === "Unknown Vendor") return; // skip missing ones
@@ -209,6 +210,30 @@ const topVendors = Object.entries(vendorTotals)
     browser: vendor, // <-- maps to YAxis dataKey="browser"
     visitors: Number(total.toFixed(2)), // <-- maps to XAxis/Bar dataKey="visitors"
     fill: `var(--chart-${(idx % 5) + 1})`, // give each bar a color
+  }));
+
+
+
+
+  // --- TOP FIVE VENDORS BY FREQUENCY ---
+const vendorCounts: Record<string, number> = {};
+
+allTransactions.data.forEach((trx: Transaction) => {
+  const vendor = trx.POINT_OF_SALE_AND_LOCATION?.trim();
+
+  if (!vendor || vendor === "Unknown Vendor") return; // skip missing ones
+
+  vendorCounts[vendor] = (vendorCounts[vendor] ?? 0) + 1;
+});
+
+// sort by frequency desc and take top 5
+const topVendorsByFrequency = Object.entries(vendorCounts)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 5)
+  .map(([vendor, count], idx) => ({
+    browser: vendor, // <-- maps to YAxis dataKey="browser"
+    visitors: count, // <-- frequency
+    fill: `var(--chart-${(idx % 5) + 1})`, // color
   }));
 
 
@@ -256,7 +281,7 @@ const monthlySubscriptions = 7915.80;
 ];
 
   let moneyMap = new Map<string, number>();
-allTransactions.data.forEach((trx: Transaction) => {
+allTransactions2.data.forEach((trx: Transaction) => {
   if (trx.TRX_DATE && trx.AMOUNT && trx.DIRECTION) {
     let monthKeyArr = trx.TRX_DATE!.split("/");
     monthKeyArr.shift();
@@ -399,10 +424,27 @@ const sortedKeys = Array.from(moneyMap.keys()).sort((a, b) => {
                 </Card>
 
               </div>
-              <div className="flex-1 min-w-[300px] max-w-[500px]">
+              {/* <div className="flex-1 min-w-[300px] max-w-[500px]">
                 <ChartBarMixed data={topVendors} title="Top vendors by volume" />
               </div>
               <div className="flex-1 min-w-[300px] max-w-[500px]">
+              </div> */}
+              <div className="flex-1 min-w-[300px] max-w-[500px]">
+                <ChartBarMixed
+                  data={topVendors}
+                  title="Top 5 Vendors by Amount Spent"
+                  description="All Time"
+                  footer="Showing top five vendors by spending"
+                />
+              </div>
+
+              <div className="flex-1 min-w-[300px] max-w-[500px]">
+                <ChartBarMixed
+                  data={topVendorsByFrequency}
+                  title="Top 5 Vendors by Frequency"
+                  description="All Time"
+                  footer="Showing top five vendors by frequency"
+                />
               </div>
             </div>
             {/* <div className="flex flex-wrap gap-4 justify-center">

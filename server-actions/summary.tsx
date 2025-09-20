@@ -41,6 +41,23 @@ export const getAllDatapoints = cache(
   }
 );
 
+export const getAllDatapoints2 = cache(
+  async (skip = 0) => {
+    try {
+      const datapoints = await db.transaction.findMany({
+        orderBy: { TRX_DATE: "desc" },
+        // take: 1000,
+        skip,
+      });
+
+      return { success: true, data: datapoints };
+    } catch (error) {
+      console.error("getAllDatapoints error:", error);
+      return { success: false, data: [] };
+    }
+  }
+);
+
 export const getCategoryDatapoints = cache(
   async (limit = 15, skip = 0) => {
     try {
