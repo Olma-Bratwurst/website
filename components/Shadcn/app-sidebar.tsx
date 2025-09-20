@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import {
   ArrowUpCircleIcon,
   BarChartIcon,
@@ -19,6 +18,7 @@ import {
   Store,
   UsersIcon,
 } from "lucide-react"
+import * as React from "react"
 
 import { NavDocuments } from "@/components/Shadcn/nav-documents"
 import { NavMain } from "@/components/Shadcn/nav-main"

@@ -1,7 +1,7 @@
 "use server";
 
-import SessionProvider from "@/lib/SessionProvider";
 import { handleRateLimit } from "@/lib/rate-limit";
+import SessionProvider from "@/lib/SessionProvider";
 import "styles/tailwind.css"
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

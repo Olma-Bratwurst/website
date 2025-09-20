@@ -1,6 +1,5 @@
 "use client"
 
-import { cn } from "@/lib/utils";
 import {
     Building,
     Camera,
@@ -17,6 +16,7 @@ import {
     CardFooter,
     CardHeader,
 } from "@/components/Shadcn/ui/card";
+import { cn } from "@/lib/utils";
 
 interface BentoItem {
     title: string;
