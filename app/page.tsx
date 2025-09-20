@@ -340,9 +340,7 @@ export default async function Page() {
       <SidebarInset>
         <SiteHeader />
         <Card className="flex flex-col mb-2 sm:mr-3 overflow-hidden">
-          <CardHeader className="p-3 pb-0"> 
-            <CardTitle>Transactions Statistics</CardTitle>
-        <Card className="flex flex-col mb-3 sm:mr-3 overflow-hidden">
+
           <CardHeader className="p-3 mb-3">
             <div className="flex gap-4">
               <div className="flex w-1/2 justify-between">
@@ -475,18 +473,19 @@ export default async function Page() {
               {/* <ChartBarMixed data={topVendors} /> */}
 
               <Infobox
-                title="Total Spent"
-                description="The total amount that you have spent"
+                title="Total Earned"
+                description=""
                 value={`${formatCHF(totalSpent)} CHF`}
               />
+
               <Infobox
-                title="Total Earned"
-                description="The total amount that you have earned"
+                title="Total Spent"
+                description=""
                 value={`${formatCHF(totalEarned)} CHF`}
               />
               <Infobox
                 title="Monthly Subscriptions"
-                description="Monthly cost of recognized subscription services"
+                description=""
                 value={`${formatCHF(monthlySubscriptions)} CHF`}
               />
               <RecurringPaymentsCard items={demoItems} />
