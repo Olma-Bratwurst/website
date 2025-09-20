@@ -120,7 +120,7 @@ export default async function Page() {
   ////////////////////////////////// TRANSACTIONS PER DAY ////////////////////////////////// 
   function toISODateKey(input: unknown): string | null {
     if (!input) return null;
-  
+
     // If it's already a Date
     if (input instanceof Date && !isNaN(input.getTime())) {
       const y = input.getFullYear();
@@ -128,9 +128,9 @@ export default async function Page() {
       const d = String(input.getDate()).padStart(2, "0");
       return `${y}-${m}-${d}`;
     }
-  
+
     const s = String(input).trim();
-  
+
     // Try dd/MM/yyyy (also accepts dd.MM.yyyy and dd-MM-yyyy)
     const ddmmyyyy = s.replace(/[-.]/g, "/").match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
     if (ddmmyyyy) {
@@ -140,7 +140,7 @@ export default async function Page() {
         return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
       }
     }
-  
+
     // Try yyyy-MM-dd
     const ymd = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
     if (ymd) {
@@ -150,29 +150,29 @@ export default async function Page() {
         return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
       }
     }
-  
+
     return null; // bad/unknown format
   }
-  
+
   const txs = allTransactions?.data ?? [];
   const dailyTotals: Record<string, number> = {};
-  
+
   for (const trx of txs) {
     if (trx?.AMOUNT_CHF == null) continue;
     // Uncomment to count only spending (outgoing):
     if (trx?.DIRECTION === 1) continue;
-  
+
     const key = toISODateKey(trx?.TRX_DATE ?? trx?.VAL_DATE);
     if (!key) continue;
-  
+
     dailyTotals[key] = (dailyTotals[key] ?? 0) + Number(trx.AMOUNT_CHF);
   }
-  
+
   const chartData3 = Object.entries(dailyTotals)
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([date, total]) => ({ label: date, value: Number(total.toFixed(2)) }));
 
-    // console.log(chartData3)
+  // console.log(chartData3)
 
 
   // --- TOP FIVE VENDORS ---
@@ -195,121 +195,121 @@ export default async function Page() {
 
   const vendorTotals: Record<string, number> = {};
 
-allTransactions.data.forEach((trx: Transaction) => {
-  const vendor = trx.POINT_OF_SALE_AND_LOCATION?.trim();
-  const amountChf = Number(trx.AMOUNT_CHF) || 0;
+  allTransactions.data.forEach((trx: Transaction) => {
+    const vendor = trx.POINT_OF_SALE_AND_LOCATION?.trim();
+    const amountChf = Number(trx.AMOUNT_CHF) || 0;
 
-  if (!vendor || vendor === "Unknown Vendor") return; // skip missing ones
+    if (!vendor || vendor === "Unknown Vendor") return; // skip missing ones
 
-  vendorTotals[vendor] = (vendorTotals[vendor] ?? 0) + amountChf;
-});
+    vendorTotals[vendor] = (vendorTotals[vendor] ?? 0) + amountChf;
+  });
 
-// sort by total desc and take top 5
-const topVendors = Object.entries(vendorTotals)
-  .sort((a, b) => b[1] - a[1])
-  .slice(0, 5)
-  .map(([vendor, total], idx) => ({
-    browser: vendor, // <-- maps to YAxis dataKey="browser"
-    visitors: Number(total.toFixed(2)), // <-- maps to XAxis/Bar dataKey="visitors"
-    fill: `var(--chart-${(idx % 5) + 1})`, // give each bar a color
-  }));
+  // sort by total desc and take top 5
+  const topVendors = Object.entries(vendorTotals)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([vendor, total], idx) => ({
+      browser: vendor, // <-- maps to YAxis dataKey="browser"
+      visitors: Number(total.toFixed(2)), // <-- maps to XAxis/Bar dataKey="visitors"
+      fill: `var(--chart-${(idx % 5) + 1})`, // give each bar a color
+    }));
 
 
 
 
   // --- TOP FIVE VENDORS BY FREQUENCY ---
-const vendorCounts: Record<string, number> = {};
+  const vendorCounts: Record<string, number> = {};
 
-allTransactions.data.forEach((trx: Transaction) => {
-  const vendor = trx.POINT_OF_SALE_AND_LOCATION?.trim();
+  allTransactions.data.forEach((trx: Transaction) => {
+    const vendor = trx.POINT_OF_SALE_AND_LOCATION?.trim();
 
-  if (!vendor || vendor === "Unknown Vendor") return; // skip missing ones
+    if (!vendor || vendor === "Unknown Vendor") return; // skip missing ones
 
-  vendorCounts[vendor] = (vendorCounts[vendor] ?? 0) + 1;
-});
+    vendorCounts[vendor] = (vendorCounts[vendor] ?? 0) + 1;
+  });
 
-// sort by frequency desc and take top 5
-const topVendorsByFrequency = Object.entries(vendorCounts)
-  .sort((a, b) => b[1] - a[1])
-  .slice(0, 5)
-  .map(([vendor, count], idx) => ({
-    browser: vendor, // <-- maps to YAxis dataKey="browser"
-    visitors: count, // <-- frequency
-    fill: `var(--chart-${(idx % 5) + 1})`, // color
-  }));
+  // sort by frequency desc and take top 5
+  const topVendorsByFrequency = Object.entries(vendorCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([vendor, count], idx) => ({
+      browser: vendor, // <-- maps to YAxis dataKey="browser"
+      visitors: count, // <-- frequency
+      fill: `var(--chart-${(idx % 5) + 1})`, // color
+    }));
 
 
 
   ////////// INFO BOXES ///////////
   let totalSpent = 0;
-let totalEarned = 0;
+  let totalEarned = 0;
 
-allTransactions.data.forEach((trx: Transaction) => {
-  const amount = Number(trx.AMOUNT_CHF) || 0;
-  if (!trx.DIRECTION) return;
+  allTransactions.data.forEach((trx: Transaction) => {
+    const amount = Number(trx.AMOUNT_CHF) || 0;
+    if (!trx.DIRECTION) return;
 
-  if (trx.DIRECTION === 1) {
-    // outgoing
-    totalSpent += amount;
-  } else if (trx.DIRECTION === 2) {
-    // incoming
-    totalEarned += amount;
-  }
-});
+    if (trx.DIRECTION === 1) {
+      // outgoing
+      totalSpent += amount;
+    } else if (trx.DIRECTION === 2) {
+      // incoming
+      totalEarned += amount;
+    }
+  });
 
-const monthlySubscriptions = 7915.80;
+  const monthlySubscriptions = 7915.80;
 
   const demoItems = [
-  {
-    title: "To FRATELLI, ST. GALLEN",
-    amount: -15.8,
-    currency: "CHF",
-    payments: [
-      { date: "2025-08-07", amount: -15.8 },
-      { date: "2025-06-03", amount: -15.8 },
-      { date: "2025-05-13", amount: -15.8 },
-    ],
-  },
-  {
-    title: "SALAERZAHLUNG",
-    amount: +7900,
-    currency: "CHF",
-    payments: [
-      { date: "2025-08-22", amount: +7900 },
-      { date: "2025-07-22", amount: +7900 },
-      { date: "2025-06-20", amount: +7900 },
-    ],
-  },
-];
+    {
+      title: "To FRATELLI, ST. GALLEN",
+      amount: -15.8,
+      currency: "CHF",
+      payments: [
+        { date: "2025-08-07", amount: -15.8 },
+        { date: "2025-06-03", amount: -15.8 },
+        { date: "2025-05-13", amount: -15.8 },
+      ],
+    },
+    {
+      title: "SALAERZAHLUNG",
+      amount: +7900,
+      currency: "CHF",
+      payments: [
+        { date: "2025-08-22", amount: +7900 },
+        { date: "2025-07-22", amount: +7900 },
+        { date: "2025-06-20", amount: +7900 },
+      ],
+    },
+  ];
 
   let moneyMap = new Map<string, number>();
-allTransactions2.data.forEach((trx: Transaction) => {
-  if (trx.TRX_DATE && trx.AMOUNT && trx.DIRECTION) {
-    let monthKeyArr = trx.TRX_DATE!.split("/");
-    monthKeyArr.shift();
-    let monthKey = monthKeyArr.join("/");
+  allTransactions2.data.forEach((trx: Transaction) => {
+    if (trx.TRX_DATE && trx.AMOUNT && trx.DIRECTION) {
+      let monthKeyArr = trx.TRX_DATE!.split("/");
+      monthKeyArr.shift();
+      let monthKey = monthKeyArr.join("/");
 
-    if (!Array.from(moneyMap.keys()).some((key) => key === monthKey)) {
-      moneyMap.set(monthKey, 0);
+      if (!Array.from(moneyMap.keys()).some((key) => key === monthKey)) {
+        moneyMap.set(monthKey, 0);
+      }
+
+      let new_amount = trx.DIRECTION === 1 ? -trx.AMOUNT! : trx.AMOUNT!;
+      moneyMap.set(monthKey, moneyMap.get(monthKey)! + new_amount);
     }
+  });
 
-    let new_amount = trx.DIRECTION === 1 ? -trx.AMOUNT! : trx.AMOUNT!;
-    moneyMap.set(monthKey, moneyMap.get(monthKey)! + new_amount);
-  }
-});
+  const sortedKeys = Array.from(moneyMap.keys()).sort((a, b) => {
+    const [monthAStr, yearAStr] = a.split("/");
+    const [monthBStr, yearBStr] = b.split("/");
 
-const sortedKeys = Array.from(moneyMap.keys()).sort((a, b) => {
-  const [monthAStr, yearAStr] = a.split("/");
-  const [monthBStr, yearBStr] = b.split("/");
+    const monthA = parseInt(monthAStr ?? "0", 10);
+    const yearA = parseInt(yearAStr ?? "0", 10);
+    const monthB = parseInt(monthBStr ?? "0", 10);
+    const yearB = parseInt(yearBStr ?? "0", 10);
 
-  const monthA = parseInt(monthAStr ?? "0", 10);
-  const yearA = parseInt(yearAStr ?? "0", 10);
-  const monthB = parseInt(monthBStr ?? "0", 10);
-  const yearB = parseInt(yearBStr ?? "0", 10);
-
-  if (yearA !== yearB) return yearA - yearB;
-  return monthA - monthB;
-});
+    if (yearA !== yearB) return yearA - yearB;
+    return monthA - monthB;
+  });
 
 
   while (sortedKeys.length > 5) {
@@ -346,13 +346,13 @@ const sortedKeys = Array.from(moneyMap.keys()).sort((a, b) => {
                 <CardTitle>Transactions Statistics</CardTitle>
                 <div className="flex gap-4">
                   <Label htmlFor="income">Income</Label>
-                  <Checkbox id="income" name="income" />
+                  <Checkbox disabled id="income" name="income" />
                 </div>
               </div>
-                <div className="flex gap-4">
-                  <Label>Expenses</Label>
-                  <Checkbox />
-                </div>
+              <div className="flex gap-4">
+                <Label htmlFor="expenses">Expenses</Label>
+                <Checkbox id="expenses" name="expenses" checked disabled />
+              </div>
             </div>
           </CardHeader>
           <CardContent className="flex flex-col gap-4 overflow-hidden">
@@ -398,14 +398,14 @@ const sortedKeys = Array.from(moneyMap.keys()).sort((a, b) => {
             </div>
             <div className="flex flex-wrap gap-4 justify-center">
               <div className="flex-1 w-full">
-              <CustomBarChartPerDay
-                data={chartData3}
-                texts={{
-                  title: "Amount Spent Per Day",
-                  description: "Converted to CHF",
-                  chartLabel: "Total Amount Spent",
-                }}
-              />
+                <CustomBarChartPerDay
+                  data={chartData3}
+                  texts={{
+                    title: "Amount Spent Per Day",
+                    description: "Converted to CHF",
+                    chartLabel: "Total Amount Spent",
+                  }}
+                />
 
               </div>
             </div>
@@ -496,10 +496,8 @@ const sortedKeys = Array.from(moneyMap.keys()).sort((a, b) => {
               {/* <Infobox title="Total Spent" description="The total amount that you have spent" value="9999CHF" />
               <Infobox title="Total Earned" description="The total amount that you have earned" value="5CHF" />
               <Infobox title="Monthly Subscriptions" description="Monthly cost of recognized subscription services" value="50CHF" /> */}
-          </CardContent>
+            </CardContent>
           </Card>
-
-          <RecurringPaymentsCard items={demoItems} />
           <div className="p-4">
             <BudgetPlannerWidget currency="CHF" />
           </div>
@@ -521,19 +519,19 @@ const sortedKeys = Array.from(moneyMap.keys()).sort((a, b) => {
         {/* <div className=" mx-auto p-4 space-y-6">
           <PaymentsMap payments={[]} apiKey={process.env.GOOGLE_MAPS_API_KEY!} />
         </div> */}
-          <Card className="flex flex-col mt-5 mb-3 sm:mr-3 overflow-hidden">
-            <CardHeader className="p-3 mb-3">
-              <CardTitle>Transaction Table View</CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-wrap gap-6 justify-center">
-              <OverviewTable />
-            </CardContent>
-          </Card>
-              <div>
-                {/* existing content */}
-                <PartnerAds />
-              </div>
-        
+        <Card className="flex flex-col mt-5 mb-3 sm:mr-3 overflow-hidden">
+          <CardHeader className="p-3 mb-3">
+            <CardTitle>Transaction Table View</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-wrap gap-6 justify-center">
+            <OverviewTable />
+          </CardContent>
+        </Card>
+        <div>
+          {/* existing content */}
+          <PartnerAds />
+        </div>
+
       </SidebarInset>
     </SidebarProvider>
   )

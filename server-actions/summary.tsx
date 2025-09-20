@@ -30,7 +30,7 @@ export const getAllDatapoints = cache(
       });
 
       const filtered_data = datapoints.filter((datapoint) => {
-        return datapoint.TRX_DATE?.split("/")[1] === "08" && datapoint.TRX_DATE.split("/")[2] === "2025"
+        return datapoint.TRX_DATE?.split("/")[1] === "08" && datapoint.TRX_DATE.split("/")[2] === "2025" && datapoint.DIRECTION === 2
       })
 
       return { success: true, data: filtered_data };
