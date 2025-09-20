@@ -35,6 +35,8 @@ function formatCHF(value: number) {
 }
 import { Linechart } from "@/components/Custom/Linechart";
 import { ChartConfig } from "@/components/Shadcn/ui/chart";
+import { Checkbox } from "@/components/Shadcn/ui/checkbox";
+import { Label } from "@/components/Shadcn/ui/label";
 
 export default async function Page() {
   // const data = await db.transaction.findMany({
@@ -42,7 +44,7 @@ export default async function Page() {
   //   take: 500,
   //   skip: 0,
   // });
-  const allTransactions = await getAllDatapoints();
+  const allTransactions = await getAllDatapoints()
 
   const locationSet = new Set<string>();
 
@@ -313,8 +315,20 @@ const sortedKeys = Array.from(moneyMap.keys()).sort((a, b) => {
       <SidebarInset>
         <SiteHeader />
         <Card className="flex flex-col mb-3 sm:mr-3 overflow-hidden">
-          <CardHeader className=" p-3 mb-3">
-            <CardTitle>Transactions Statistics</CardTitle>
+          <CardHeader className="p-3 mb-3">
+            <div className="flex gap-4">
+              <div className="flex w-1/2 justify-between">
+                <CardTitle>Transactions Statistics</CardTitle>
+                <div className="flex gap-4">
+                  <Label htmlFor="income">Income</Label>
+                  <Checkbox id="income" name="income" />
+                </div>
+              </div>
+                <div className="flex gap-4">
+                  <Label>Expenses</Label>
+                  <Checkbox />
+                </div>
+            </div>
           </CardHeader>
           <CardContent className="flex flex-col gap-4 overflow-hidden">
             <div className="flex flex-wrap gap-4 justify-center">
