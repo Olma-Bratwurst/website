@@ -8,7 +8,8 @@ type Msg = {
   rows?: Record<string, any>[];
 };
 
-const ASK_ENDPOINT = "http://localhost:5050/api/ask";
+// const ASK_ENDPOINT = "http://localhost:5050/api/ask";
+const ASK_ENDPOINT = "/api/ask";
 
 export default function SqlChat() {
   const [messages, setMessages] = useState<Msg[]>([]);
