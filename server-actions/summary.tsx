@@ -25,6 +25,7 @@ export const getAllDatapoints = cache(
     try {
       const datapoints = await db.transaction.findMany({
         orderBy: { TRX_DATE: "desc" },
+        // take: 1000,
         skip,
       });
 
