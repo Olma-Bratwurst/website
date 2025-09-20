@@ -13,12 +13,12 @@ type RecurringItem = {
 };
 
 export default function RecurringPaymentsCard({
-  items,
-  heading = "Recurring Payments/ Income",
-}: {
-  items: [RecurringItem, RecurringItem]; // exactly 2
-  heading?: string;
-}) {
+    items,
+    heading = "Recurring Payments/ Income",
+  }: {
+    items: RecurringItem[];   // <-- changed
+    heading?: string;
+  }) {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
 
   function formatMoney(a: number, ccy: string) {

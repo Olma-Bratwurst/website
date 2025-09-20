@@ -11,9 +11,9 @@ import {
 
 export const description = "A mixed bar chart"
 
-type ChartBarMixedProps = {
-  data: { browser: string; visitors: number; fill?: string }[]
-}
+// type ChartBarMixedProps = {
+//   data: { browser: string; visitors: number; fill?: string }[]
+// }
 
 const chartConfig = {
   visitors: { label: "Visitors" },
@@ -24,12 +24,23 @@ const chartConfig = {
   other: { label: "Other", color: "var(--chart-5)" },
 } satisfies ChartConfig
 
-export function ChartBarMixed({ data }: ChartBarMixedProps) {
+// export function ChartBarMixed({ data }: ChartBarMixedProps) {
+
+type ChartBarMixedProps = {
+  data: { browser: string; visitors: number; fill?: string }[]
+  title: string
+  description?: string
+  footer?: string
+}
+
+export function ChartBarMixed({ data, title, description, footer }: ChartBarMixedProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Top 5 Vendors</CardTitle>
-        <CardDescription>All Time</CardDescription>
+        {/* <CardTitle>Top 5 Vendors by Amount Spent</CardTitle>
+        <CardDescription>All Time</CardDescription> */}
+        <CardTitle>{title}</CardTitle>
+        {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -55,7 +66,7 @@ export function ChartBarMixed({ data }: ChartBarMixedProps) {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="text-muted-foreground leading-none">
-          Showing top five vendors by spending
+        {footer}
         </div>
       </CardFooter>
     </Card>
