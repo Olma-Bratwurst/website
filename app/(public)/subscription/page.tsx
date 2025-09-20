@@ -11,7 +11,7 @@ import { getLastDatapoints } from "@/server-actions/summary";
 export default async function Page() {
 
   const last10transcations = await getLastDatapoints();
-  console.log("last10transcations: ", last10transcations)
+  // console.log("last10transcations: ", last10transcations)
 
   return (
     <SidebarProvider
