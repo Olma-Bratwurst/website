@@ -23,7 +23,7 @@ export default async function OverviewTable({
 
   return (
     <>
-      <Card className="flex flex-col mb-3 sm:mr-3 mt-5 overflow-hidden">
+      <Card className="flex flex-col mb-3 sm:mr-3 mt-5 overflow-hidden w-full">
         <CardHeader className=" pl-3">
           <CardTitle>Transactions Overview</CardTitle>
           <CardDescription></CardDescription>

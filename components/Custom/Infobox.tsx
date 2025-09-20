@@ -8,7 +8,7 @@ interface InfoboxArgs {
 
 function Infobox(args: InfoboxArgs) {
   return (
-    <Card className="flex flex-col mt-5 mb-3 sm:mr-3 overflow-hidden">
+    <Card className="flex flex-col mt-1 mb-1 sm:mr-1 overflow-hidden">
     <CardHeader className=" p-3 mb-3">
       <div className="flex-1 min-w-[300px] max-w-[500px]">
         <CardTitle>{args.title}</CardTitle>
