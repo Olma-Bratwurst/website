@@ -29,7 +29,6 @@ import {
 } from "@/lib/utils";
 import { DataTablePagination } from "./datatable-pagination";
 import { DataTableToolbar } from "./datatable-toolbar";
-import { ColumnWithMeta } from "./types";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -68,18 +67,18 @@ export function DataTable<TData, TValue>({
   const handleLogFilteredRows = () => {
     const formattedData = table.getFilteredRowModel().rows.map((row) => {
       const rowData: Record<string, unknown> = {};
-  
+
       // Define the columns you want to exclude
       const excludedColumns = ["actions"];
-  
+
       table.getAllColumns().forEach((column) => {
         const columnId = column.id;
-  
+
         if (!excludedColumns.includes(columnId)) {
           rowData[columnId] = row.getValue(columnId);
         }
       });
-  
+
       return rowData;
     });
 

@@ -38,11 +38,11 @@ export function CustomPieChartByCategory({
 }: CustomPieChartByCategoryProps) {
   // Define a set of colors
   const predefinedColors = [
-    "hsl(210, 100%, 56%)", // Blue
-    "hsl(34, 100%, 50%)", // Orange
-    "hsl(122, 39%, 49%)", // Green
-    "hsl(0, 100%, 50%)", // Red
-    "hsl(274, 82%, 60%)", // Purple
+    "var(--chart-1)", // Blue
+    "var(--chart-2)", // Orange
+    "var(--chart-3)", // Green
+    "var(--chart-4)", // Red
+    "var(--chart-5)", // Purple
     "hsl(60, 100%, 50%)", // Yellow
     "hsl(180, 66%, 49%)", // Cyan
     "hsl(300, 76%, 72%)", // Pink

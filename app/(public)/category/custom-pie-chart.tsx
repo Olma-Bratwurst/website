@@ -52,7 +52,7 @@ export function CustomPieChartByCategory({
 
   const chartData = data.map((item: DataItem, index: number) => ({
     browser: item.label,
-    visitors: item.value ?? 0, // Ensure value is never undefined
+    visitors: Math.floor(item.value ?? 0), // Ensure value is never undefined
     fill: item.color || predefinedColors[index % predefinedColors.length],
   }));
 
