@@ -13,6 +13,7 @@ import {
   HelpCircleIcon,
   LayoutDashboardIcon,
   ListIcon,
+  MessageSquareMore,
   SearchIcon,
   SettingsIcon,
   Store,
@@ -138,11 +139,11 @@ const data = {
       url: "/",
       icon: DatabaseIcon,
     },
-    // {
-    //   name: "Subscription",
-    //   url: "/subscription",
-    //   icon: ClipboardListIcon,
-    // },
+    {
+      name: "Chat",
+      url: "/chat",
+      icon: MessageSquareMore,
+    },
     // {
     //   name: "Category",
     //   url: "/category",

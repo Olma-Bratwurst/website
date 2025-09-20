@@ -49,6 +49,10 @@ export default async function Page() {
     }
   })
 
+  const chartDataIO = [
+    { label: "Incoming", value: incoming },
+    { label: "Outgoing", value: outgoing }
+  ];
 
   ////////////////////////////////// CATEGORY ////////////////////////////////// 
   if (!allTransactions.success || !allTransactions.data) {
@@ -107,11 +111,11 @@ export default async function Page() {
       <SidebarInset>
         <SiteHeader />
         <div className="mx-auto p-4 space-y-6">
-          <Card className="flex flex-col mt-5 mb-3 sm:mr-3 overflow-hidden h-[500px]">
+          <Card className="flex flex-col mt-5 mb-3 sm:mr-3 overflow-hidden">
             <CardHeader className="p-3 mb-3">
               <CardTitle>Transaction Data</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex flex-wrap gap-6 justify-center">
               <CustomPieChartByCategory
                 data={chartData}
                 texts={{
@@ -134,22 +138,58 @@ export default async function Page() {
                     "Showing total transaction amounts in CHF per booking type",
                 }}
               />
-              <Piechart chartData={[
-            { category: "incoming", spending: incoming, fill: "var(--chart-1)" },
-            { category: "outgoing", spending: outgoing, fill: "var(--chart-2)" }
-          ]} chartConfig={{ spending: { label: "Amount" }, incoming: { label: "Incoming ", color: "#ffff00" }, outgoing: { label: "Outgoing ", color: "#00ffff" } }} />
+              <CustomPieChartByCategory
+                data={chartDataIO}
+                texts={{
+                  title: "Incoming vs Outgoing",
+                  description: "Total amount (converted to CHF)",
+                  visitorLabel: "CHF",
+                  footerText: "",
+                  footerSubText: "Showing total incoming vs outgoing transactions",
+                }}
+              />
             </CardContent>
           </Card>
+
+          <Card className="flex flex-col mt-5 mb-3 sm:mr-3 overflow-hidden">
+            <CardHeader className="p-3 mb-3">
+              <CardTitle>Overview</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-wrap gap-6 justify-center">
+              <Infobox title="Total Spent" description="The total amount that you have spent" value="9999CHF" />
+              <Infobox title="Total Earned" description="The total amount that you have earned" value="5CHF" />
+              <Infobox title="Monthly Subscriptions" description="Monthly cost of recognized subscription services" value="50CHF" />
+          </CardContent>
+          </Card>
+
+          <Card className="flex flex-col mt-5 mb-3 sm:mr-3 overflow-hidden">
+            <CardHeader className="p-3 mb-3">
+              <CardTitle>Table View</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-wrap gap-6 justify-center">
+              <OverviewTable/>
+            </CardContent>
+          </Card>
+
+          <Card className="flex flex-col mt-5 mb-3 sm:mr-3 overflow-hidden h-[500px]">
+            <CardHeader className="p-3 mb-3">
+              <CardTitle>Map</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0 flex-1">
+              <div className="w-full h-[100%] min-h-[400px]">
+                <PaymentsMap
+                  payments={[]}
+                  apiKey={process.env.GOOGLE_MAPS_API_KEY!}
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+
         </div>
-        <div className=" mx-auto p-4 space-y-6">
-          <div className="flex flex-row justify-center space-x-6">
-            <Infobox title="Total spent" description="The total amount that you have spent" value="9999CHF" />
-            <Infobox title="Total earned" description="The total amount that you have earned" value="5CHF" />
-            <Infobox title="Monthly subscriptions" description="Monthly cost of recognized subscription services" value="50CHF" />
-          </div>
-          <OverviewTable/>
+        {/* <div className=" mx-auto p-4 space-y-6">
           <PaymentsMap payments={[]} apiKey={process.env.GOOGLE_MAPS_API_KEY!} />
-        </div>
+        </div> */}
         
       </SidebarInset>
     </SidebarProvider>
