@@ -12,6 +12,7 @@ export default function BudgetPlannerWidget({
 }) {
   const now = new Date();
   const year = now.getFullYear();
+  
 
   // Months Aug–Nov of current year
   const monthDefs = [
@@ -112,9 +113,9 @@ export default function BudgetPlannerWidget({
   }
 
   return (
-    <div className="w-full max-w-4xl rounded-xl border bg-white shadow-lg">
+    <div className="w-full rounded-xl border bg-white shadow-lg ">
       {/* Header */}
-      <div className="px-4 py-3 border-b bg-gray-50 rounded-t-xl">
+      <div className="px-4 py-3 border-b bg-gray-50 rounded-t-xl w-full">
         <h2 className="text-sm font-semibold text-gray-800">
           In the month of {monthLabel} {year}, I want to spend on:
           {/* <span className="font-normal text-gray-700">{wantToSpendOn}</span> */}
@@ -122,8 +123,8 @@ export default function BudgetPlannerWidget({
       </div>
 
       {/* Month tabs */}
-      <div className="px-4 pt-3">
-        <div className="flex gap-2 flex-wrap">
+      <div className="w-full px-4 pt-3">
+        <div className="flex gap-2 flex-wrap w-full">
           {monthDefs.map((m) => (
             <button
               key={m.key}
@@ -156,7 +157,7 @@ export default function BudgetPlannerWidget({
       {/* Table */}
       <div className="p-4">
         <div className="overflow-auto rounded-lg border">
-          <table className="min-w-[560px] w-full text-sm">
+          <table className="min-w-[500px]  text-sm">
             <thead className="bg-gray-100">
               <tr>
                 <th className="text-left font-semibold px-3 py-2 border-b w-1/2">Item</th>

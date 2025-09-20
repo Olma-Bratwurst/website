@@ -464,8 +464,8 @@ export default async function Page() {
           </CardContent>
         </Card>
 
-        <div className="mx-auto p-4 space-y-6">
-          <Card className="flex flex-col mt-5 mb-3 sm:mr-3 overflow-hidden">
+        <div className="mx-auto p-4 space-y-6 w-full">
+          <Card className="flex flex-col mt-5 mb-3 sm:mr-3 overflow-hidden w-full">
             <CardHeader className="p-3 pb-0"> 
               <CardTitle>First Glance</CardTitle>
             </CardHeader>
@@ -495,16 +495,18 @@ export default async function Page() {
               <Infobox title="Monthly Subscriptions" description="Monthly cost of recognized subscription services" value="50CHF" /> */}
             </CardContent>
           </Card>
-          <div className="p-4">
-            <BudgetPlannerWidget currency="CHF" />
-          </div>
+            <div className="flex flex-wrap gap-3 justify-center">
+              {/* other small boxes */}
+                <BudgetPlannerWidget currency="CHF" />
+            </div>
 
-          <Card className="flex flex-col mt-5 mb-3 sm:mr-3 overflow-hidden h-[500px]">
-            <CardHeader className="p-3 mb-3">
+
+          <Card className="flex flex-col mt-5 mb-3 sm:mr-3  h-[550px]">
+            <CardHeader className="p-2 pb-0 ">
               <CardTitle>Transaction Map</CardTitle>
             </CardHeader>
-            <CardContent className="p-6 flex-1">
-              <div className="w-full h-[100%] min-h-[400px]">
+            <CardContent className="p-2 ">
+              <div className=" h-[100%] min-h-[400px] rounded-lg">
                 <PaymentsMap
                   payments={[]}
                   apiKey={process.env.GOOGLE_MAPS_API_KEY!}

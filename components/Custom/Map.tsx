@@ -1234,10 +1234,11 @@ let data: [number, number][] = [
 export function PaymentsMap(args: PaymentsMapArgs) {
   return (<APIProvider apiKey={args.apiKey}>
     <Map
-      defaultCenter={{ lat: 22.54992, lng: 0 }}
-      defaultZoom={3}
+      defaultCenter={{ lat: 47.4201881, lng: 9.3703122 }}
+      defaultZoom={13}
       gestureHandling='greedy'
       disableDefaultUI
+      // className="rounded-lg"
     >
       {data.map((pos, i) => {
         return <Marker key={i} position={{ lat: pos[0], lng: pos[1] }} />
