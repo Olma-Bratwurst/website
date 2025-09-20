@@ -8,16 +8,24 @@ interface InfoboxArgs {
 
 function Infobox(args: InfoboxArgs) {
   return (
-    <Card>
-      <CardHeader>
+    <Card className="flex flex-col mt-5 mb-3 sm:mr-3 overflow-hidden">
+    <CardHeader className=" p-3 mb-3">
+      <div className="flex-1 min-w-[300px] max-w-[500px]">
         <CardTitle>{args.title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p>{args.value}</p>
-      </CardContent>
-      <CardFooter>
+        </div>
+    </CardHeader>
+    <CardContent className="flex flex-col gap-4">
+      <div className="flex flex-wrap gap-4 justify-center">
+        <div className="flex-1 min-w-[300px] max-w-[500px]">
+        {args.value}
+        </div>
+      </div>
+      <div className="flex flex-wrap gap-4 justify-center">
+        <div className="flex-1 min-w-[300px] max-w-[1015px]">
         <CardDescription>{args.description}</CardDescription>
-      </CardFooter>
+        </div>
+      </div>
+    </CardContent>
     </Card>
   )
 }

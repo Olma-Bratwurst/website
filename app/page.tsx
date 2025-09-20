@@ -27,6 +27,7 @@ export default async function Page() {
           <div className="flex flex-row justify-center space-x-6">
             <Infobox title="Total spent" description="The total amount that you have spent" value="9999CHF" />
             <Infobox title="Total earned" description="The total amount that you have earned" value="5CHF" />
+            <Infobox title="Monthly subscriptions" description="Monthly cost of recognized subscription services" value="50CHF" />
           </div> 
         </div>
       </SidebarInset>
