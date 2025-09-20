@@ -9,8 +9,8 @@ import Image from "next/image";
 
 ///Users/shirley/Documents/STARTHACK25/website/public/partner_img/bier.png
 const ADS = [
-  { img: "/image/11.jpeg", text: "We saw you spent CHF 141 on beer. \n Get 1-for-1 drinks at Schützengarten." },
-  { img: "/image/22.jpeg", text: "Changing up your home? Get 10% off every CHF500." },
+  { img: "/image/22.jpeg", text: "We saw you spent CHF 141 on beer. \n Get 1-for-1 drinks at Schützengarten." },
+  { img: "/image/44.jpeg", text: "Changing up your home? Get 10% off every CHF500." },
   { img: "/image/33.jpeg", text: "Love the mountains? Enjoy the views at Säntis this September." },
 ];
 
