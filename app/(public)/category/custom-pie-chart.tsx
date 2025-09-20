@@ -98,7 +98,8 @@ export function CustomPieChartByCategory({
                   data={chartData}
                   dataKey="visitors"
                   nameKey="browser"
-                  innerRadius={60}
+                  innerRadius="58%"   // thicker ring -> bigger visual
+                  outerRadius="94%" 
                   strokeWidth={5}
                 >
                   <Label

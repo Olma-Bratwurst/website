@@ -337,22 +337,20 @@ const sortedKeys = Array.from(moneyMap.keys()).sort((a, b) => {
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
-        <Card className="flex flex-col mb-3 sm:mr-3 overflow-hidden">
-          <CardHeader className=" p-3 mb-3">
+        <Card className="flex flex-col mb-2 sm:mr-3 overflow-hidden">
+          <CardHeader className="p-3 pb-0"> 
             <CardTitle>Transactions Statistics</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4 overflow-hidden">
             <div className="flex flex-wrap gap-4 justify-center">
-              <div className="flex-1 min-w-[300px] max-w-[500px]">
+  <div className="flex-1 min-w-[300px] max-w-[560px] h-80">
                 <CustomPieChartByCategory
                   data={chartData}
                   texts={{
                     title: "Transactions per Category",
                     description: "Total amount (converted to CHF)",
                     visitorLabel: "CHF",
-                    footerText: "",
-                    footerSubText:
-                      "Showing total transaction amounts in CHF per category",
+
                   }}
                 />
               </div>
@@ -363,9 +361,7 @@ const sortedKeys = Array.from(moneyMap.keys()).sort((a, b) => {
                     title: "Transactions per Booking Type",
                     description: "Total amount (converted to CHF)",
                     visitorLabel: "CHF",
-                    footerText: "",
-                    footerSubText:
-                      "Showing total transaction amounts in CHF per booking type",
+
                   }}
                 />
               </div>
@@ -376,13 +372,12 @@ const sortedKeys = Array.from(moneyMap.keys()).sort((a, b) => {
                     title: "Incoming vs Outgoing",
                     description: "Total amount (converted to CHF)",
                     visitorLabel: "CHF",
-                    footerText: "",
-                    footerSubText: "Showing total incoming vs outgoing transactions",
+
                   }}
                 />
               </div>
             </div>
-            <div className="flex flex-wrap gap-4 justify-center">
+            <div className="flex flex-wrap gap-2 justify-center">
               <div className="flex-1 w-full">
               <CustomBarChartPerDay
                 data={chartData3}
@@ -401,8 +396,8 @@ const sortedKeys = Array.from(moneyMap.keys()).sort((a, b) => {
 
 
         <Card className="flex flex-col mb-3 sm:mr-3 overflow-hidden">
-          <CardHeader className=" p-3 mb-3">
-            <CardTitle>Transactions Statistics</CardTitle>
+          <CardHeader className="p-3 pb-0"> 
+            <CardTitle>Insights</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4 overflow-hidden">
             <div className="flex flex-wrap gap-4 justify-center">
@@ -456,7 +451,7 @@ const sortedKeys = Array.from(moneyMap.keys()).sort((a, b) => {
 
         <div className="mx-auto p-4 space-y-6">
           <Card className="flex flex-col mt-5 mb-3 sm:mr-3 overflow-hidden">
-            <CardHeader className="p-3 mb-3">
+            <CardHeader className="p-3 pb-0"> 
               <CardTitle>First Glance</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-wrap gap-6 justify-center">
