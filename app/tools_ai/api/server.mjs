@@ -146,16 +146,28 @@ async function llmToSQL(question, schema) {
 
 Rules:
 - Output ONLY SQL. No explanations. No comments.
-- Use only tables/columns from this schema:
-${schema}
-- Output ONLY the SQL, no explanations, no comments.\n
-- Use only columns from the provided schema.\n
-- Prefer explicit JOINs and qualified columns (table.column) when relevant.\n
-- Dates must use correct literals (DATE 'YYYY-MM-DD').\n
-- Do NOT filter by trx_type_short .\n\n
-- Always calculate expenses using the column name amount_chf .\n\n
-- Only if the user asks about categorizing expenses: Categories available are 'Salary/Income', 'Groceries','Transport & Parking','Fuel','Food & Drinks'. If the question asks for such a category, identify the relevant category from this list. If unclear, ask the user to ask again while specifying one of the abovementioned categories.\n\n
+- Use only columns from this schema: 
+    zeilen_nr        INTEGER,
+    account_name     TEXT,
+    trx_id           TEXT,
+    trx_type_short   TEXT,
+    trx_type_name    TEXT,
+	buchungs_art_name TEXT,
+    trx_date         DATE,
+    amount           NUMERIC(15,2),
+    amount_str       TEXT,
+    trx_curry_name   TEXT,
+    amount_chf       NUMERIC(15,2),
+    creditor_name    TEXT,
+    country_name     TEXT,
+    category         TEXT
 
+- Output ONLY the SQL, no explanations, no comments.\n
+- Do not use JOIN.
+- If a column value is not explicity mentioned in the query, do not filter any columns.
+- Always calculate expenses in CHF using the column 'transactions.amount_chf' .\n\n
+- Only if specific categories are mentioned, available categories are 'Salary/Income', 'Groceries','Transport & Parking','Fuel','Food & Drinks'. If the question asks for such a category, identify the relevant category from this list. If unclear, ask the user to ask again while specifying one of the abovementioned categories.\n\n
+- Whenever a merchant name is mentioned, use approximate matching with LIKE and %...% instead of exact matching on 'transactions.creditor_name'.\n\n
 - For months/quarters, always use full ranges:
   month:  trx_date >= DATE 'YYYY-MM-01' AND trx_date < DATE 'YYYY-(MM+1)-01'
   quarter: date_trunc('quarter', trx_date) with < next quarter
@@ -256,6 +268,41 @@ Write a short answer for a non-technical user.`
   return (await llmChat(messages, { max_new_tokens: 220 })).trim();
 }
 
+// Suggest related questions
+async function suggestRelatedQuestions(question) {
+  const prompt = [
+    {
+      role: 'system',
+      content: [{
+        type: 'text',
+        text:
+`You suggest follow-up questions. 
+Rules:
+- Return ONLY a JSON array of exactly 3 short, simple, distinct follow-up questions.
+- Each question should be closely related to the user's last question and about their expenditure.
+- Examples: "How much did I spend on groceries last month?", "What was my total income last year?", "Which merchant did I spend the most at in the past month?"
+- Keep each question under 12 words.
+- No explanations. JSON ONLY.`
+      }]
+    },
+    {
+      role: 'user',
+      content: [{ type: 'text', text: `User question: ${question}\nReturn JSON now.` }]
+    }
+  ];
+  const raw = await llmChat(prompt, { max_new_tokens: 80, temperature: 0.6 });
+  try {
+    const arr = JSON.parse(raw);
+    if (Array.isArray(arr)) {
+      return arr.slice(0, 3).map(s => String(s).trim()).filter(Boolean);
+    }
+  } catch {}
+  // Fallback if model didn't return clean JSON
+  return [];
+}
+
+
+
 // -------------------- Routes --------------------
 app.get('/health', (_req, res) => res.json({ ok: true }));
 
@@ -278,7 +325,11 @@ app.post('/api/ask', async (req, res) => {
     // 4) Summarize
     const summary = await summarizeAnswer(question, safeSql, rows);
 
-    return res.json({ summary, sql: safeSql, rows });
+    // 5) Suggest related questions
+    const suggestions = await suggestRelatedQuestions(question);
+
+
+    return res.json({ summary, sql: safeSql, rows, suggestions });
   } catch (err) {
     const msg = err?.message || String(err);
     return res.status(400).json({ error: msg });

@@ -6,6 +6,8 @@ type Msg = {
   text: string;
   sql?: string;
   rows?: Record<string, any>[];
+  suggestions?: string[]; 
+
 };
 
 const ASK_ENDPOINT = "http://localhost:5050/api/ask";
@@ -20,34 +22,68 @@ export default function SqlChat() {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, busy]);
 
-  async function send() {
-    const question = input.trim();
-    if (!question || busy) return;
-    setBusy(true);
-    setMessages((m) => [...m, { role: "user", text: question }]);
-    setInput("");
+  // async function send() {
+  //   const question = input.trim();
+  //   if (!question || busy) return;
+  //   setBusy(true);
+  //   setMessages((m) => [...m, { role: "user", text: question }]);
+  //   setInput("");
 
-    try {
-      const r = await fetch(ASK_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question }),
-      });
-      const j: any = await r.json();
-      if (!r.ok) throw new Error(j.error || "Request failed");
+  //   try {
+  //     const r = await fetch(ASK_ENDPOINT, {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ question }),
+  //     });
+  //     const j: any = await r.json();
+  //     if (!r.ok) throw new Error(j.error || "Request failed");
 
-      const answer: Msg = {
-        role: "assistant",
-        text: j.summary ?? "No summary returned.",
-        // Remove sql and rows if you don't want to show them
-      };
-      setMessages((m) => [...m, answer]);
-    } catch (e: any) {
-      setMessages((m) => [...m, { role: "assistant", text: `⚠️ ${e.message || String(e)}` }]);
-    } finally {
-      setBusy(false);
-    }
+  //     const answer: Msg = {
+  //       role: "assistant",
+  //       text: j.summary ?? "No summary returned.",
+  //       // Remove sql and rows if you don't want to show them
+  //     };
+  //     setMessages((m) => [...m, answer]);
+  //   } catch (e: any) {
+  //     setMessages((m) => [...m, { role: "assistant", text: `⚠️ ${e.message || String(e)}` }]);
+  //   } finally {
+  //     setBusy(false);
+  //   }
+  // }
+  async function sendText(question: string) {
+  if (!question.trim() || busy) return;
+  setBusy(true);
+  setMessages((m) => [...m, { role: "user", text: question }]);
+
+  try {
+    const r = await fetch(ASK_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question }),
+    });
+    const j: any = await r.json();
+    if (!r.ok) throw new Error(j.error || "Request failed");
+
+    const answer: Msg = {
+      role: "assistant",
+      text: j.summary ?? "No summary returned.",
+      suggestions: Array.isArray(j.suggestions) ? j.suggestions : undefined, // NEW
+      // sql: j.sql, rows: j.rows // keep hidden or show if you want
+    };
+    setMessages((m) => [...m, answer]);
+  } catch (e: any) {
+    setMessages((m) => [...m, { role: "assistant", text: `⚠️ ${e.message || String(e)}` }]);
+  } finally {
+    setBusy(false);
   }
+}
+
+async function send() {
+  const question = input.trim();
+  setInput("");
+  await sendText(question);
+}
+
 
   function onKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -67,7 +103,7 @@ export default function SqlChat() {
         {/* Messages */}
         <div ref={listRef} className="flex-1 overflow-auto p-4 space-y-3">
           {messages.map((m, i) => (
-            <Bubble key={i} msg={m} />
+            <Bubble key={i} msg={m} onSuggestClick={(q) => sendText(q)} />
           ))}
           {busy && <TypingIndicator />}
         </div>
@@ -97,7 +133,22 @@ export default function SqlChat() {
   );
 }
 
-function Bubble({ msg }: { msg: Msg }) {
+// function Bubble({ msg }: { msg: Msg }) {
+//   const isUser = msg.role === "user";
+//   return (
+//     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
+//       <div
+//         className={`max-w-[85%] rounded-2xl px-4 py-3 shadow-sm text-sm leading-relaxed ${
+//           isUser ? "bg-indigo-600 text-white" : "bg-gray-100"
+//         }`}
+//       >
+//         <p className="whitespace-pre-wrap">{msg.text}</p>
+//         {/* Remove SQL and rows display */}
+//       </div>
+//     </div>
+//   );
+// }
+function Bubble({ msg, onSuggestClick }: { msg: Msg; onSuggestClick?: (q: string) => void }) {
   const isUser = msg.role === "user";
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
@@ -107,7 +158,22 @@ function Bubble({ msg }: { msg: Msg }) {
         }`}
       >
         <p className="whitespace-pre-wrap">{msg.text}</p>
-        {/* Remove SQL and rows display */}
+
+        {/* NEW: suggestion buttons for assistant messages */}
+        {!isUser && msg.suggestions?.length ? (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {msg.suggestions.map((s, idx) => (
+              <button
+                key={idx}
+                onClick={() => onSuggestClick?.(s)}
+                className="rounded-full border border-indigo-300 bg-white px-3 py-1 text-xs hover:bg-indigo-50"
+                title="Ask this next"
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        ) : null}
       </div>
     </div>
   );
