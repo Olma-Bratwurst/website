@@ -29,7 +29,11 @@ export const getAllDatapoints = cache(
         skip,
       });
 
-      return { success: true, data: datapoints };
+      const filtered_data = datapoints.filter((datapoint) => {
+        return datapoint.TRX_DATE?.split("/")[1] === "08" && datapoint.TRX_DATE.split("/")[2] === "2025"
+      })
+
+      return { success: true, data: filtered_data };
     } catch (error) {
       console.error("getAllDatapoints error:", error);
       return { success: false, data: [] };

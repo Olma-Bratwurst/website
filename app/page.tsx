@@ -157,7 +157,7 @@ export default async function Page() {
   for (const trx of txs) {
     if (trx?.AMOUNT_CHF == null) continue;
     // Uncomment to count only spending (outgoing):
-    if (trx?.DIRECTION !== 1) continue;
+    if (trx?.DIRECTION === 1) continue;
   
     const key = toISODateKey(trx?.TRX_DATE ?? trx?.VAL_DATE);
     if (!key) continue;
@@ -230,10 +230,6 @@ allTransactions.data.forEach((trx: Transaction) => {
   }
 });
 
-// placeholder for subscriptions – adjust filtering logic later
-// const monthlySubscriptions = allTransactions.data
-//   .filter(trx => trx.CATEGORY === "Subscriptions") // or use TEXT_SHORT_DEBITOR matchers
-//   .reduce((sum, trx) => sum + (Number(trx.AMOUNT_CHF) || 0), 0);
 const monthlySubscriptions = 7915.80;
 
   const demoItems = [
@@ -259,31 +255,6 @@ const monthlySubscriptions = 7915.80;
   },
 ];
 
-  // let moneyMap = new Map<string, number>();
-  // allTransactions.data.forEach((trx: Transaction) => {
-  //   if (trx.TRX_DATE && trx.AMOUNT && trx.DIRECTION) {
-  //     let monthKeyArr = trx.TRX_DATE!.split("/");
-  //     monthKeyArr.shift();
-  //     let monthKey = monthKeyArr.join("/")
-  //     if (!moneyMap.keys().some((key) => key == monthKey)) {
-  //       moneyMap.set(monthKey, 0)
-  //     }
-  //     let new_amount = trx.DIRECTION! === 1 ? -trx.AMOUNT! : trx.AMOUNT!
-  //     moneyMap.set(monthKey, moneyMap.get(monthKey)! + new_amount)
-  //   }
-  // })
-
-  // const sortedKeys = moneyMap.keys().toArray()
-  //   .sort((a, b) => {
-  //     const [monthA, yearA] = a.split("/").map(x => parseInt(x));
-  //     const [monthB, yearB] = b.split("/").map(x => parseInt(x));
-
-  //     // First compare years, then months
-  //     if (yearA !== yearB) {
-  //       return yearA! - yearB!;
-  //     }
-  //     return monthA! - monthB!;
-  //   });
   let moneyMap = new Map<string, number>();
 allTransactions.data.forEach((trx: Transaction) => {
   if (trx.TRX_DATE && trx.AMOUNT && trx.DIRECTION) {
@@ -299,14 +270,6 @@ allTransactions.data.forEach((trx: Transaction) => {
     moneyMap.set(monthKey, moneyMap.get(monthKey)! + new_amount);
   }
 });
-
-// const sortedKeys = Array.from(moneyMap.keys()).sort((a, b) => {
-//   const [monthA, yearA] = a.split("/").map(x => parseInt(x));
-//   const [monthB, yearB] = b.split("/").map(x => parseInt(x));
-
-//   if (yearA !== yearB) return yearA - yearB;
-//   return monthA - monthB;
-// });
 
 const sortedKeys = Array.from(moneyMap.keys()).sort((a, b) => {
   const [monthAStr, yearAStr] = a.split("/");
@@ -437,7 +400,7 @@ const sortedKeys = Array.from(moneyMap.keys()).sort((a, b) => {
 
               </div>
               <div className="flex-1 min-w-[300px] max-w-[500px]">
-                <ChartBarMixed data={topVendors} />
+                <ChartBarMixed data={topVendors} title="Top vendors by volume" />
               </div>
               <div className="flex-1 min-w-[300px] max-w-[500px]">
               </div>
