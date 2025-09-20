@@ -12,20 +12,13 @@ type RecurringItem = {
   payments: Payment[];    // list of occurrences
 };
 
-// export default function RecurringPaymentsCard({
-//   items,
-//   heading = "Recurring Payments",
-// }: {
-//   items: [RecurringItem, RecurringItem]; // exactly 2
-//   heading?: string;
-// }) {
-  export default function RecurringPaymentsCard({
-    items,
-    heading = "Recurring Payments",
-  }: {
-    items: RecurringItem[];   // <-- fix here
-    heading?: string;
-  }) {
+export default function RecurringPaymentsCard({
+  items,
+  heading = "Recurring Payments/ Income",
+}: {
+  items: [RecurringItem, RecurringItem]; // exactly 2
+  heading?: string;
+}) {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
 
   function formatMoney(a: number, ccy: string) {
