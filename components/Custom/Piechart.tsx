@@ -5,64 +5,47 @@ import { Pie, PieChart } from "recharts"
 import {
   ChartConfig,
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/Shadcn/ui/chart"
 
 export const description = "A donut chart"
 
-const chartData = [
-  { category: "leisure", spending: 275, fill: "var(--chart-1)" },
-  { category: "clothes", spending: 200, fill: "var(--chart-2)" },
-  { category: "food", spending: 187, fill: "var(--chart-3)" },
-  { category: "transportation", spending: 173, fill: "var(--chart-4)" },
-  { category: "other", spending: 90, fill: "var(--chart-5)" },
-]
+interface ChartData {
+  category: string;
+  spending: number;
+  fill: string;
+}
 
-const chartConfig = {
-  spending: {
-    label: "Money spent",
-  },
-  leisure: {
-    label: "Leisure",
-    color: "var(--chart-1)",
-  },
-  clothes: {
-    label: "Clothes",
-    color: "var(--chart-2)",
-  },
-  food: {
-    label: "Food",
-    color: "var(--chart-3)",
-  },
-  transportation: {
-    label: "Transportation",
-    color: "var(--chart-4)",
-  },
-  other: {
-    label: "Other",
-    color: "var(--chart-5)",
-  },
-} satisfies ChartConfig
+interface PiechartArgs {
+  chartConfig: ChartConfig;
+  chartData: ChartData[];
+}
 
-export function Piechart() {
+export function Piechart(args: PiechartArgs) {
   return (
-        <ChartContainer
-          config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
-        >
-          <PieChart>
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Pie
-              data={chartData}
-              dataKey="spending"
-              nameKey="category"
-              innerRadius={60}
-            />
-          </PieChart>
-        </ChartContainer>
+    <ChartContainer
+      config={args.chartConfig}
+      className="mx-auto aspect-square max-h-[250px]"
+    >
+      <PieChart>
+        <ChartTooltip
+          cursor={false}
+          content={<ChartTooltipContent hideLabel />}
+        />
+        <Pie
+          data={args.chartData}
+          dataKey="spending"
+          nameKey="category"
+          innerRadius={60}
+        />
+        <ChartLegend
+          content={<ChartLegendContent nameKey="category" />}
+          className="-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center"
+        />
+      </PieChart>
+    </ChartContainer>
   )
-}          
+}
