@@ -8,8 +8,6 @@ import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/Shadcn/ui/sidebar"
-import { Piechart } from "@/components/Custom/Piechart";
-import { db } from "@/db";
 import { PaymentsMap } from "@/components/Custom/Map";
 import { getAllDatapoints } from "@/server-actions/summary";
 import { Transaction } from "@prisma/client";
@@ -22,6 +20,8 @@ import {
   CardTitle,
 } from "@/components/Shadcn/ui/card";
 import { CustomPieChartByCategory } from "./(public)/category/custom-pie-chart";
+import { Linechart } from "@/components/Custom/Linechart";
+import { ChartConfig } from "@/components/Shadcn/ui/chart";
 
 export default async function Page() {
   // const data = await db.transaction.findMany({
@@ -32,7 +32,7 @@ export default async function Page() {
   const allTransactions = await getAllDatapoints();
 
   const locationSet = new Set<string>();
-  
+
 
   let incoming = 0;
   let outgoing = 0;
@@ -101,28 +101,68 @@ export default async function Page() {
   }));
 
   const demoItems = [
-  {
-    title: "To FRATELLI, ST. GALLEN",
-    amount: 15.8,
-    currency: "CHF",
-    payments: [
-      { date: "2025-08-07", amount: 15.8 },
-      { date: "2025-06-03", amount: 15.8 },
-      { date: "2025-05-13", amount: 15.8 },
-    ],
-  },
-  {
-    title: "SALAERZAHLUNG",
-    amount: 7900,
-    currency: "CHF",
-    payments: [
-      { date: "2025-08-22", amount: 7900 },
-      { date: "2025-07-22", amount: 7900 },
-      { date: "2025-06-20", amount: 7900 },
-    ],
-  },
-];
+    {
+      title: "To FRATELLI, ST. GALLEN",
+      amount: 15.8,
+      currency: "CHF",
+      payments: [
+        { date: "2025-08-07", amount: 15.8 },
+        { date: "2025-06-03", amount: 15.8 },
+        { date: "2025-05-13", amount: 15.8 },
+      ],
+    },
+    {
+      title: "SALAERZAHLUNG",
+      amount: 7900,
+      currency: "CHF",
+      payments: [
+        { date: "2025-08-22", amount: 7900 },
+        { date: "2025-07-22", amount: 7900 },
+        { date: "2025-06-20", amount: 7900 },
+      ],
+    },
+  ];
 
+  let moneyMap = new Map<string, number>();
+  allTransactions.data.forEach((trx: Transaction) => {
+    if (trx.TRX_DATE && trx.AMOUNT && trx.DIRECTION) {
+      let monthKeyArr = trx.TRX_DATE!.split("/");
+      monthKeyArr.shift();
+      let monthKey = monthKeyArr.join("/")
+      if (!moneyMap.keys().some((key) => key == monthKey)) {
+        moneyMap.set(monthKey, 0)
+      }
+      let new_amount = trx.DIRECTION! === 1 ? -trx.AMOUNT! : trx.AMOUNT!
+      moneyMap.set(monthKey, moneyMap.get(monthKey)! + new_amount)
+    }
+  })
+
+  const sortedKeys = moneyMap.keys().toArray()
+    .sort((a, b) => {
+      const [monthA, yearA] = a.split("/").map(x => parseInt(x));
+      const [monthB, yearB] = b.split("/").map(x => parseInt(x));
+
+      // First compare years, then months
+      if (yearA !== yearB) {
+        return yearA! - yearB!;
+      }
+      return monthA! - monthB!;
+    });
+
+  while (sortedKeys.length > 5) {
+    sortedKeys.shift()
+  }
+
+  const lineChartData = sortedKeys.map((key, i) => {
+    return { date: key, index: i, spending: Math.floor(moneyMap.get(key)!), fill: "var(--chart-1)" }
+  });
+
+  const chartConfig = {
+    spending: {
+      label: "Spending",
+      color: "var(--chart-2)",
+    },
+  } satisfies ChartConfig;
 
   return (
     <SidebarProvider
@@ -137,6 +177,9 @@ export default async function Page() {
       <SidebarInset>
         <SiteHeader />
         <div className="mx-auto p-4 space-y-6">
+          <Card className="flex flex-col mt-5 mb-3">
+            <Linechart data={lineChartData} config={chartConfig} />
+          </Card>
           <Card className="flex flex-col mt-5 mb-3 sm:mr-3 overflow-hidden">
             <CardHeader className="p-3 mb-3">
               <CardTitle>Transaction Data</CardTitle>
@@ -185,7 +228,7 @@ export default async function Page() {
               <Infobox title="Total Spent" description="The total amount that you have spent" value="9999CHF" />
               <Infobox title="Total Earned" description="The total amount that you have earned" value="5CHF" />
               <Infobox title="Monthly Subscriptions" description="Monthly cost of recognized subscription services" value="50CHF" />
-          </CardContent>
+            </CardContent>
           </Card>
 
           <RecurringPaymentsCard items={demoItems} />
@@ -195,7 +238,7 @@ export default async function Page() {
               <CardTitle>Table View</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-wrap gap-6 justify-center">
-              <OverviewTable/>
+              <OverviewTable />
             </CardContent>
           </Card>
 
@@ -218,7 +261,7 @@ export default async function Page() {
         {/* <div className=" mx-auto p-4 space-y-6">
           <PaymentsMap payments={[]} apiKey={process.env.GOOGLE_MAPS_API_KEY!} />
         </div> */}
-        
+
       </SidebarInset>
     </SidebarProvider>
   )
