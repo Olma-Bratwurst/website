@@ -2,12 +2,15 @@
   "name": "q2sql-cli",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "q2sql": "node q2sql.mjs",
     "q2sql:ask": "node q2sql.mjs \"total expenditure for 2024\""
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "pg": "^8.12.0"
   }
