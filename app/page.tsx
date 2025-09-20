@@ -169,11 +169,31 @@ export default async function Page() {
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([date, total]) => ({ label: date, value: Number(total.toFixed(2)) }));
 
+    // console.log(chartData3)
+
+
   // --- TOP FIVE VENDORS ---
+  // const vendorTotals: Record<string, number> = {};
+
+  // allTransactions.data.forEach((trx: Transaction) => {
+  //   const vendor = trx.TEXT_SHORT_DEBITOR?.trim();
+  //   const amountChf = Number(trx.AMOUNT_CHF) || 0;
+
+  //   if (!vendor || vendor === "Unknown Vendor") return; // skip missing ones
+
+  //   vendorTotals[vendor] = (vendorTotals[vendor] ?? 0) + amountChf;
+  // });
+
+  // // sort by total desc and take top 5
+  // const topVendors = Object.entries(vendorTotals)
+  //   .sort((a, b) => b[1] - a[1])
+  //   .slice(0, 5)
+  //   .map(([vendor, total]) => ({ vendor, total }));
+
   const vendorTotals: Record<string, number> = {};
 
 allTransactions.data.forEach((trx: Transaction) => {
-  const vendor = trx.POINT_OF_SALE_AND_LOCATION?.trim();
+  const vendor = trx.TEXT_SHORT_DEBITOR?.trim();
   const amountChf = Number(trx.AMOUNT_CHF) || 0;
 
   if (!vendor || vendor === "Unknown Vendor") return; // skip missing ones
@@ -189,28 +209,6 @@ const topVendors = Object.entries(vendorTotals)
     browser: vendor, // <-- maps to YAxis dataKey="browser"
     visitors: Number(total.toFixed(2)), // <-- maps to XAxis/Bar dataKey="visitors"
     fill: `var(--chart-${(idx % 5) + 1})`, // give each bar a color
-  }));
-
-
-  // --- TOP FIVE VENDORS BY FREQUENCY ---
-const vendorCounts: Record<string, number> = {};
-
-allTransactions.data.forEach((trx: Transaction) => {
-  const vendor = trx.POINT_OF_SALE_AND_LOCATION?.trim();
-
-  if (!vendor || vendor === "Unknown Vendor") return; // skip missing ones
-
-  vendorCounts[vendor] = (vendorCounts[vendor] ?? 0) + 1;
-});
-
-// sort by frequency desc and take top 5
-const topVendorsByFrequency = Object.entries(vendorCounts)
-  .sort((a, b) => b[1] - a[1])
-  .slice(0, 5)
-  .map(([vendor, count], idx) => ({
-    browser: vendor, // <-- maps to YAxis dataKey="browser"
-    visitors: count, // <-- frequency
-    fill: `var(--chart-${(idx % 5) + 1})`, // color
   }));
 
 
@@ -421,6 +419,8 @@ const sortedKeys = Array.from(moneyMap.keys()).sort((a, b) => {
           <CardContent className="flex flex-col gap-4 overflow-hidden">
             <div className="flex flex-wrap gap-4 justify-center">
               <div className="flex-1 min-w-[300px] max-w-[500px]">
+                {/* <Linechart data={lineChartData} config={chartConfig} /> */}
+
                 <Card className="flex flex-col mb-3 sm:mr-3 overflow-hidden">
                   <CardHeader className=" p-3 mb-3">
                     <CardTitle>Account Balance Delta</CardTitle>
@@ -437,23 +437,15 @@ const sortedKeys = Array.from(moneyMap.keys()).sort((a, b) => {
 
               </div>
               <div className="flex-1 min-w-[300px] max-w-[500px]">
-                <ChartBarMixed
-                  data={topVendors}
-                  title="Top 5 Vendors by Amount Spent"
-                  description="All Time"
-                  footer="Showing top five vendors by spending"
-                />
+                <ChartBarMixed data={topVendors} />
               </div>
-
               <div className="flex-1 min-w-[300px] max-w-[500px]">
-                <ChartBarMixed
-                  data={topVendorsByFrequency}
-                  title="Top 5 Vendors by Frequency"
-                  description="All Time"
-                  footer="Showing top five vendors by frequency"
-                />
               </div>
             </div>
+            {/* <div className="flex flex-wrap gap-4 justify-center">
+              <div className="flex-1 w-full">
+              </div>
+            </div> */}
           </CardContent>
         </Card>
 
@@ -493,15 +485,6 @@ const sortedKeys = Array.from(moneyMap.keys()).sort((a, b) => {
             <BudgetPlannerWidget currency="CHF" />
           </div>
 
-          <Card className="flex flex-col mt-5 mb-3 sm:mr-3 overflow-hidden">
-            <CardHeader className="p-3 mb-3">
-              <CardTitle>Transaction Table View</CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-wrap gap-6 justify-center">
-              <OverviewTable />
-            </CardContent>
-          </Card>
-
           <Card className="flex flex-col mt-5 mb-3 sm:mr-3 overflow-hidden h-[500px]">
             <CardHeader className="p-3 mb-3">
               <CardTitle>Transaction Map</CardTitle>
@@ -519,6 +502,14 @@ const sortedKeys = Array.from(moneyMap.keys()).sort((a, b) => {
         {/* <div className=" mx-auto p-4 space-y-6">
           <PaymentsMap payments={[]} apiKey={process.env.GOOGLE_MAPS_API_KEY!} />
         </div> */}
+          <Card className="flex flex-col mt-5 mb-3 sm:mr-3 overflow-hidden">
+            <CardHeader className="p-3 mb-3">
+              <CardTitle>Transaction Table View</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-wrap gap-6 justify-center">
+              <OverviewTable />
+            </CardContent>
+          </Card>
               <div>
                 {/* existing content */}
                 <PartnerAds />
