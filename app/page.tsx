@@ -13,6 +13,8 @@ import { db } from "@/db";
 import { PaymentsMap } from "@/components/Custom/Map";
 import { getAllDatapoints } from "@/server-actions/summary";
 import { Transaction } from "@prisma/client";
+import RecurringPaymentsCard from "@/components/Custom/RecurringPaymentsCard";
+
 import {
   Card,
   CardContent,
@@ -98,6 +100,30 @@ export default async function Page() {
     value: total,
   }));
 
+  const demoItems = [
+  {
+    title: "To FRATELLI, ST. GALLEN",
+    amount: 15.8,
+    currency: "CHF",
+    payments: [
+      { date: "2025-08-07", amount: 15.8 },
+      { date: "2025-06-03", amount: 15.8 },
+      { date: "2025-05-13", amount: 15.8 },
+    ],
+  },
+  {
+    title: "SALAERZAHLUNG",
+    amount: 7900,
+    currency: "CHF",
+    payments: [
+      { date: "2025-08-22", amount: 7900 },
+      { date: "2025-07-22", amount: 7900 },
+      { date: "2025-06-20", amount: 7900 },
+    ],
+  },
+];
+
+
   return (
     <SidebarProvider
       style={
@@ -161,6 +187,8 @@ export default async function Page() {
               <Infobox title="Monthly Subscriptions" description="Monthly cost of recognized subscription services" value="50CHF" />
           </CardContent>
           </Card>
+
+          <RecurringPaymentsCard items={demoItems} />
 
           <Card className="flex flex-col mt-5 mb-3 sm:mr-3 overflow-hidden">
             <CardHeader className="p-3 mb-3">

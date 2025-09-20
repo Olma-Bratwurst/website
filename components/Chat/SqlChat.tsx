@@ -10,8 +10,8 @@ type Msg = {
 
 };
 
-// const ASK_ENDPOINT = "http://localhost:5050/api/ask";
-const ASK_ENDPOINT = "/api/ask";
+const ASK_ENDPOINT = "http://localhost:5050/api/ask";
+// const ASK_ENDPOINT = "/api/ask";
 
 export default function SqlChat() {
   const [messages, setMessages] = useState<Msg[]>([]);
@@ -98,7 +98,7 @@ async function send() {
       <div className="flex flex-col border rounded-xl shadow-lg w-full max-w-3xl h-[90vh] bg-white">
         {/* Header */}
         <div className="px-4 py-3 border-b bg-indigo-600 text-white rounded-t-xl">
-          <h1 className="text-lg font-semibold">Watsonx SQL Assistant</h1>
+          <h1 className="text-lg font-semibold">Watsonx Personal Finance Assistant</h1>
         </div>
 
         {/* Messages */}
