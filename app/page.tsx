@@ -9,6 +9,7 @@ import {
 } from "@/components/Shadcn/ui/sidebar"
 import { Piechart } from "@/components/Custom/Piechart";
 import { db } from "@/db";
+import { PaymentsMap } from "@/components/Custom/Map";
 
 export default async function Page() {
   const data = await db.transaction.findMany({
@@ -17,10 +18,15 @@ export default async function Page() {
     skip: 0,
   });
 
+  let locationSet = new Set<String>();
+
   let incoming = 0;
   let outgoing = 0;
 
   data.forEach((dataPoint) => {
+    if (dataPoint.POINT_OF_SALE_AND_LOCATION) {
+      locationSet.add(dataPoint.POINT_OF_SALE_AND_LOCATION!);
+    }
     if (dataPoint.DIRECTION && dataPoint.AMOUNT) {
       if (dataPoint.DIRECTION === 1) {
         outgoing += dataPoint.AMOUNT!;
@@ -44,6 +50,7 @@ export default async function Page() {
       <SidebarInset>
         <SiteHeader />
         <div className="w-full max-w-6xl mx-auto p-4 space-y-6">
+
           <Piechart chartData={[
             { category: "incoming", spending: incoming, fill: "#ffff00" },
             { category: "outgoing", spending: outgoing, fill: "#00ffff" }
@@ -53,6 +60,7 @@ export default async function Page() {
             <Infobox title="Total earned" description="The total amount that you have earned" value="5CHF" />
             <Infobox title="Monthly subscriptions" description="Monthly cost of recognized subscription services" value="50CHF" />
           </div>
+          <PaymentsMap payments={[]} apiKey={process.env.GOOGLE_MAPS_API_KEY!} />
         </div>
       </SidebarInset>
     </SidebarProvider>
