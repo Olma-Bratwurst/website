@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 type Msg = {
   role: "user" | "assistant";
@@ -33,7 +33,7 @@ export default function SqlChat() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question }),
       });
-      const j = await r.json();
+      const j: any = await r.json();
       if (!r.ok) throw new Error(j.error || "Request failed");
 
       const answer: Msg = {
