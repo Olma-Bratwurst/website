@@ -91,4 +91,6 @@ model Transaction {
   ACQUIRER_COUNTRY_ID     Int?
   ACQUIRER_COUNTRY_NAME   String?
   CARD_ID                 String?
+  CATEGORY                String?
+  AMOUNT_CHF              Float?
 }

@@ -27,7 +27,7 @@ export default async function Page() {
   const categoryTotals: Record<string, number> = {};
 
   allTransactions.data.forEach((trx: Transaction) => {
-    const category = trx.CATEGORY || "Not specified";
+    const category = trx.BUCHUNGS_ART_NAME || "Not specified";
     const amountChf = Number(trx.AMOUNT_CHF) || 0;
 
     if (!categoryTotals[category]) {
@@ -62,12 +62,12 @@ export default async function Page() {
               <CustomPieChartByCategory
                 data={chartData}
                 texts={{
-                  title: "Transactions per Category",
+                  title: "Transactions per Booking Type",
                   description: "Total amount (converted to CHF)",
                   visitorLabel: "CHF",
                   footerText: "",
                   footerSubText:
-                    "Showing total transaction amounts in CHF per category",
+                    "Showing total transaction amounts in CHF per booking type",
                 }}
               />
             </CardContent>
@@ -77,7 +77,6 @@ export default async function Page() {
     </SidebarProvider>
   );
 }
-
 
 // "use server";
 
@@ -103,11 +102,11 @@ export default async function Page() {
 //     return <div className="p-4">No data available</div>;
 //   }
 
-//   // Group by category (CATEGORY) and TRX_CURRY_NAME
+//   // Group by category (BUCHUNGS_ART_NAME) and TRX_CURRY_NAME
 //   const categoryMap: Record<string, Record<string, number>> = {};
 
 //   allTransactions.data.forEach((trx: any) => {
-//     const category = trx.CATEGORY || "Not specified";
+//     const category = trx.BUCHUNGS_ART_NAME || "Not specified";
 //     const currency = trx.TRX_CURRY_NAME || "Unknown";
 //     const amount = Number(trx.AMOUNT) || 0;
 
@@ -145,7 +144,7 @@ export default async function Page() {
 //         <div className="mx-auto p-4 space-y-6">
 //           <Card className="flex flex-col mt-5 mb-3 sm:mr-3 overflow-hidden h-[400px]">
 //             <CardHeader className="p-3 mb-3">
-//               <CardTitle>Transactions per Category</CardTitle>
+//               <CardTitle>Transactions per Booking Type</CardTitle>
 //             </CardHeader>
 //             <CardContent>
 //               <div className="flex flex-wrap gap-6 justify-center">

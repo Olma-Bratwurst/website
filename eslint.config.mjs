@@ -1,11 +1,11 @@
-import * as fs from "fs"
 
 // https://github.com/francoismassart/eslint-plugin-tailwindcss/pull/381
 // import eslintPluginTailwindcss from "eslint-plugin-tailwindcss"
-import eslintPluginImport from "eslint-plugin-import"
 import eslintPluginNext from "@next/eslint-plugin-next"
+import eslintPluginImport from "eslint-plugin-import"
 import eslintPluginStorybook from "eslint-plugin-storybook"
 import typescriptEslint from "typescript-eslint"
+import * as fs from "fs"
 
 const eslintIgnore = [
   ".git/",
@@ -39,6 +39,7 @@ const config = typescriptEslint.config(
   },
   {
     settings: {
+      "import/core-modules": ["dotenv/config"],
       tailwindcss: {
         callees: ["classnames", "clsx", "ctl", "cn", "cva"],
       },
@@ -49,6 +50,7 @@ const config = typescriptEslint.config(
       },
     },
     rules: {
+      "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-unused-vars": [
         "warn",
         {

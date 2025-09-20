@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import {
   ArrowUpCircleIcon,
   BarChartIcon,
@@ -14,11 +13,13 @@ import {
   HelpCircleIcon,
   LayoutDashboardIcon,
   ListIcon,
+  MessageSquareMore,
   SearchIcon,
   SettingsIcon,
   Store,
   UsersIcon,
 } from "lucide-react"
+import * as React from "react"
 
 import { NavDocuments } from "@/components/Shadcn/nav-documents"
 import { NavMain } from "@/components/Shadcn/nav-main"
@@ -139,20 +140,25 @@ const data = {
       icon: DatabaseIcon,
     },
     {
-      name: "Subscription",
-      url: "/subscription",
-      icon: ClipboardListIcon,
+      name: "Chat",
+      url: "/chat",
+      icon: MessageSquareMore,
     },
-    {
-      name: "Category",
-      url: "/category",
-      icon: FileIcon,
-    },
-    {
-      name: "Vendor",
-      url: "/vendor",
-      icon: Store,
-    },
+    // {
+    //   name: "Category",
+    //   url: "/category",
+    //   icon: FileIcon,
+    // },
+    // {
+    //   name: "Booking Type",
+    //   url: "/booking-type",
+    //   icon: FileIcon,
+    // },
+    // {
+    //   name: "Vendor",  
+    //   url: "/vendor",
+    //   icon: Store,
+    // },
   ],
 }
 
