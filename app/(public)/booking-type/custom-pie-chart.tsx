@@ -65,7 +65,7 @@ export function CustomPieChartByCategory({
       };
       return config;
     },
-    { visitors: { label: "Visitors", color: "#000000" } },
+    { visitors: { label: "Value", color: "#000000" } },
   );
 
   const totalVisitors = React.useMemo(() => {

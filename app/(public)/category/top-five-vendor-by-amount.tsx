@@ -16,7 +16,7 @@ export const description = "A mixed bar chart"
 // }
 
 const chartConfig = {
-  visitors: { label: "Visitors" },
+  visitors: { label: "Value" },
   chrome: { label: "Chrome", color: "var(--chart-1)" },
   safari: { label: "Safari", color: "var(--chart-2)" },
   firefox: { label: "Firefox", color: "var(--chart-3)" },
