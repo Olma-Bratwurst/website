@@ -1,105 +1,202 @@
+# Olma Bratwurst
 
-# [Next.js Enterprise Boilerplate](https://blazity.com/open-source/nextjs-enterprise-boilerplate) 
+A prototype AI-powered personal finance management application that automatically categorizes bank transactions, provides spending insights, and offers conversational financial analysis powered by IBM watsonx.
 
-A production-ready template for building enterprise applications with Next.js. This boilerplate provides a solid foundation with carefully selected technologies and ready-to-go infrastructure to help you develop high-quality applications efficiently.
+Users have limited insight into their spending patterns and lack tools to detect meaningful trends in their financial history. Traditional banking apps provide basic transaction lists but fail to offer intelligent analysis and actionable insights.
 
-## Motivation
+## Features
 
-While most Next.js boilerplates focus on individual developer needs with excessive complexity, **next-enterprise** prioritizes strategic simplicity for enterprise teams. It offers a streamlined foundation with high-impact features that maximize developer productivity and accelerate time-to-market for business-critical applications.
+### Core Functionality
+- **Automatic Transaction Categorization** - Intelligently categorizes transactions (groceries, transport, leisure, etc.)
+- **Retailer Recognition** - Automatically identifies and assigns retailer information to transactions
+- **Conversational AI Interface** - Natural language queries about your finances powered by IBM watsonx
+- **Visual Analytics** - Interactive charts and spending pattern visualizations
+- **Recurring Payment Detection** - Identifies and tracks subscription services and recurring expenses
 
-<a href="https://blazity.com/">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="/assets/blazity-logo-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="/assets/blazity-logo-light.svg">
-  <img alt="Logo" align="right" height="80" src="/assets/blazity-logo-light.svg">
-</picture>
-</a>
+### AI-Powered Insights
+- **Spending Analysis** - Analyze expenditure by category, merchant, location, and time period
+- **Pattern Detection** - Identify unusual transactions and spending anomalies
+- **Financial Recommendations** - AI-generated savings tips and optimization suggestions
+- **Predictive Analytics** - Forecast recurring costs and seasonal spending patterns
 
-> [!NOTE]
-> **Blazity** is a group of Next.js architects. We help organizations architect, optimize, and deploy high-performance Next.js applications at scale. Contact us at [contact@blazity.com](https://blazity.com) if you’d like to talk about your project.
+### Data Management
+- **Export Capabilities** - CSV/Excel export functionality
+- **API Integration** - RESTful endpoints for banking system integration
+- **Real-time Processing** - Live transaction analysis and categorization
 
+## Technology Stack
 
+- **Frontend**: Next.js, React, TypeScript, Tailwind CSS
+- **Backend**: Node.js, Express.js, PostgreSQL
+- **AI Platform**: IBM watsonx (Granite models)
+- **Charts**: Recharts, Chart.js
+- **Maps**: Google Maps API
+- **Database**: PostgreSQL with Prisma ORM
 
-## Documentation
+## Getting Started
 
-There is a separate documentation that explains its functionality, highlights core business values and technical decisions, provides guidelines for future development, and includes architectural diagrams.
+### Prerequisites
+- Node.js 18+
+- PostgreSQL database
+- IBM Cloud account with watsonx access
+- Google Maps API key (optional, for location features)
 
-We encourage you to [visit our docs (docs.blazity.com)](https://docs.blazity.com) to learn more
+### Environment Variables
 
-## Integrated features
+Create a `.env` file in the project root:
 
-### Boilerplate
-With this template you will get all the boilerplate features included:
+```bash
+# Database
+PG_URI=postgresql://user:password@localhost:5432/finance_db
 
-* [Next.js 15](https://nextjs.org/) - Performance-optimized configuration using App Directory
-* [Tailwind CSS v4](https://tailwindcss.com/) - Utility-first CSS framework for efficient UI development
-* [ESlint 9](https://eslint.org/) and [Prettier](https://prettier.io/) - Code consistency and error prevention
-* [Corepack](https://github.com/nodejs/corepack) & [pnpm](https://pnpm.io/) as the package manager - For project management without compromises 
-* [Strict TypeScript](https://www.typescriptlang.org/) - Enhanced type safety with carefully crafted config and [ts-reset](https://github.com/total-typescript/ts-reset) library
-* [GitHub Actions](https://github.com/features/actions) - Pre-configured workflows including bundle size and performance tracking
-* Perfect Lighthouse score - Optimized performance metrics
-* [Bundle analyzer](https://www.npmjs.com/package/@next/bundle-analyzer) - Monitor and manage bundle size during development
-* Testing suite - [Jest](https://jestjs.io/), [React Testing Library](https://testing-library.com/react), and [Playwright](https://playwright.dev/) for comprehensive testing
-* [Storybook](https://storybook.js.org/) - Component development and documentation
-* Advanced testing - Smoke and acceptance testing capabilities
-* [Conventional commits](https://www.conventionalcommits.org/) - Standardized commit history management
-* [Observability](https://opentelemetry.io/) - Open Telemetry integration
-* [Absolute imports](https://nextjs.org/docs/advanced-features/module-path-aliases) - Simplified import structure
-* [Health checks](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) - Kubernetes-compatible monitoring
-* [Radix UI](https://www.radix-ui.com/) - Headless components for customization
-* [CVA](http://cva.style/) (Class Variance Authority) - Consistent design system creation
-* [Renovate BOT](https://www.whitesourcesoftware.com/free-developer-tools/renovate) - Automated dependency and security updates
-* [Patch-package](https://www.npmjs.com/package/patch-package) - External dependency fixes without compromises
-* Component relationship tools - Graph for managing coupling and cohesion
-* [Semantic Release](https://github.com/semantic-release/semantic-release) - Automated changelog generation
-* [T3 Env](https://env.t3.gg/) - Streamlined environment variable management
+# IBM watsonx Configuration
+WX_URL=https://eu-de.ml.cloud.ibm.com
+WX_PROJECT_ID=your_watsonx_project_id
+WX_MODEL_ID=ibm/granite-3-8b-instruct
+IBM_CLOUD_API_KEY=your_ibm_cloud_api_key
 
-### Infrastructure & deployments
+# Optional: Direct IAM token for testing
+IAM_TOKEN=your_iam_token
 
-#### Vercel
+# Google Maps (optional)
+GOOGLE_MAPS_API_KEY=your_google_maps_key
 
-Easily deploy your Next.js app with [Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=github&utm_campaign=next-enterprise) by clicking the button below:
+# Server Configuration
+PORT=5050
+DEFAULT_LIMIT=200
+```
 
-[![Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/Blazity/next-enterprise)
+### Installation & Setup
 
-#### Custom cloud infrastructure
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd ai-finance-manager
+   ```
 
-**next-enterprise** offers dedicated infrastructure as code (IaC) solutions built with Terraform, designed specifically for deploying Next.js applications based on our extensive experience working with enterprise clients.
+2. **Install main application dependencies**
+   ```bash
+   npm install
+   ```
 
-Learn more in our [documentation (docs.blazity.com)][docs] how to quickstart with the deployments using simple CLI.
+3. **Install API server dependencies**
+   ```bash
+   cd app/tools_ai/api
+   npm install
+   cd ../../..
+   ```
 
-#### Available cloud providers and theirs features:
+4. **Set up the database**
+   - Create a PostgreSQL database
+   - Import your transaction data into a `transactions` table
+   - Ensure the table includes columns: `zeilen_nr`, `account_name`, `trx_id`, `trx_date`, `amount`, `amount_chf`, `creditor_name`, `category`, etc.
 
-* **AWS (Amazon Web Services)**
-  * Automated provisioning of AWS infrastructure
-  * Scalable & secure setup using:
-     * VPC - Isolated network infrastructure
-     * Elastic Container Service (ECS) - Container orchestration
-     * Elastic Container Registry (ECR) - Container image storage
-     * Application Load Balancer - Traffic distribution
-     * S3 + CloudFront - Static asset delivery and caching
-     * AWS WAF - Web Application Firewall protection
-     * Redis Cluster - Caching
-  * CI/CD ready - Continuous integration and deployment pipeline
+5. **Start the API server**
+   ```bash
+   cd app/tools_ai/api
+   npm run dev
+   ```
 
-*... more coming soon*
+6. **Start the main application**
+   ```bash
+   npm run dev
+   ```
 
-### Team & maintenance
+7. **Access the application**
+   - Web interface: http://localhost:3000
+   - API server: http://localhost:5050
 
-**next-enterprise** is backed and maintained by [Blazity](https://blazity.com), providing up to date security features and integrated feature updates.
+## 🎮 Usage Examples
 
-#### Active maintainers
+### Conversational Queries
+Ask natural language questions about your finances:
 
-- Igor Klepacki ([neg4n](https://github.com/neg4n)) - Open Source Software Developer
-- Tomasz Czechowski ([tomaszczechowski](https://github.com/tomaszczechowski)) - Solutions Architect & DevOps
-- Jakub Jabłoński ([jjablonski-it](https://github.com/jjablonski-it)) - Head of Integrations
+- "How much did I spend on groceries last month?"
+- "What was my most expensive month in 2024?"
+- "Show me all transactions from Swisscom"
+- "What are my monthly recurring payments?"
+- "How much did my summer vacation cost?"
 
-#### All-time contributors
-[bmstefanski](https://github.com/bmstefanski)
+### Command Line Interface
+Use the CLI tool for direct queries:
 
-## License
+```bash
+cd app/tools_ai
+node q2sql.mjs "total expenditure for 2024"
+```
 
-MIT
+### API Endpoints
 
+**POST** `/api/ask`
+```json
+{
+  "question": "How much did I spend on transport last month?"
+}
+```
 
-[docs]: https://docs.blazity.com/next-enterprise/deployments/enterprise-cli
+Response:
+```json
+{
+  "summary": "You spent CHF 1,245.67 on transport last month...",
+  "sql": "SELECT SUM(amount_chf) FROM transactions WHERE...",
+  "rows": [...],
+  "suggestions": [
+    "How does this compare to previous months?",
+    "What was my biggest transport expense?",
+    "Show me all public transport vs car expenses"
+  ]
+}
+```
+
+## Supported Query Types
+
+### 1. Recurring Transactions
+- Find all invoices from specific merchants
+- Calculate totals for recurring payments
+- Track subscription services
+
+### 2. Spending Analysis & Insights
+- Holiday and vacation expense tracking
+- Most/least expensive periods
+- Expenditure by country/location
+- ATM withdrawal patterns
+- Fixed cost analysis
+
+### 3. Comparisons & Optimization
+- AI-generated savings recommendations
+- Transport cost breakdown (car vs public transport)
+- Anomaly detection
+- Category suggestions
+- Data export capabilities
+
+## AI Integration
+
+This application leverages **IBM watsonx** for:
+- Natural language to SQL conversion
+- Intelligent transaction summarization
+- Financial insight generation
+- Query suggestion recommendations
+
+The AI uses IBM's Granite language models to understand financial queries and generate accurate SQL statements for data analysis.
+
+## Security & Privacy
+
+- Read-only database queries for safety
+- SQL injection prevention through parameterized queries
+- No sensitive data stored in the AI prompts
+- Local data processing with secure IBM watsonx integration
+
+## Development Status
+
+This is a **prototype** application demonstrating AI-powered financial analysis capabilities. Key features implemented:
+
+- Transaction visualization and categorization
+- Natural language query processing
+- Interactive charts and analytics
+- IBM watsonx integration
+- Recurring payment detection
+- API endpoints for integration
+
+## Contributing
+
+This is a prototype project. For production use, consider additional security measures, error handling, and scalability improvements.
